@@ -8,6 +8,7 @@ use app\models\HeroSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * HeroController implements the CRUD actions for Hero model.
@@ -21,7 +22,7 @@ class HeroController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class'   => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -39,7 +40,7 @@ class HeroController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -66,8 +67,17 @@ class HeroController extends Controller
     {
         $model = new Hero();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_class]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->file = UploadedFile::getInstance($model, 'file');
+            if ($model->file) {
+                $model->file->saveAs('images/heroes/' . $model->file->baseName . '.' . $model->file->extension);
+                $model->img = Yii::getAlias('@web') . "/images/heroes/" . $model->file->baseName . '.' . $model->file->extension;
+//var_dump($model->img);die();
+            }
+            $model->save();
+
+            return $this->redirect(['view', 'id' => $model->id_hero]);
         }
 
         return $this->render('create', [
@@ -86,8 +96,15 @@ class HeroController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_class]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+            if ($model->file) {
+                $model->file->saveAs('images/heroes/' . $model->file->baseName . '.' . $model->file->extension);
+                $model->img = "@app/images/heroes/" . $model->file->baseName . '.' . $model->file->extension;
+//var_dump($model->img);die();
+            }
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->id_hero]);
         }
 
         return $this->render('update', [

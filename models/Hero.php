@@ -7,12 +7,14 @@ use Yii;
 /**
  * This is the model class for table "heroes".
  *
- * @property int $id_class
+ * @property int $id_hero
  * @property string $name
- * @property string $picture
+ * @property string $img
+ * @property int fid_type
  */
 class Hero extends \yii\db\ActiveRecord
 {
+    public $file;
     /**
      * @inheritdoc
      */
@@ -27,8 +29,10 @@ class Hero extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['name', 'picture'], 'string', 'max' => 255],
+            [['name', 'fid_type'], 'required'],
+            [['name', 'img'], 'string', 'max' => 255],
+            [['fid_type'], 'integer'],
+            [['file'], 'file']
         ];
     }
 
@@ -38,9 +42,14 @@ class Hero extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_class' => 'Id Class',
+            'id_hero' => 'Id Class',
             'name' => 'Name',
-            'picture' => 'Picture',
+            'img' => 'Image',
         ];
+    }
+
+    public function getType()
+    {
+        return $this->hasOne(Type::className(), ['id_type' => 'fid_type']);
     }
 }

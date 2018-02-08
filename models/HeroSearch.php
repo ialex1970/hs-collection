@@ -18,8 +18,8 @@ class HeroSearch extends Hero
     public function rules()
     {
         return [
-            [['id_class'], 'integer'],
-            [['name', 'picture'], 'safe'],
+            [['id_hero'], 'integer'],
+            [['name', 'img'], 'safe'],
         ];
     }
 
@@ -59,11 +59,11 @@ class HeroSearch extends Hero
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id_class' => $this->id_class,
+            'id_class' => $this->id_hero,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'picture', $this->picture]);
+            ->andFilterWhere(['like', 'img', $this->img]);
 
         return $dataProvider;
     }

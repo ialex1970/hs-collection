@@ -13,9 +13,10 @@ class m180207_133122_create_table_heroes extends Migration
     public function safeUp()
     {
         $this->createTable('heroes', [
-            'id_class' => $this->primaryKey(),
+            'id_hero' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
-            'picture' => $this->string()->null()
+            'img' => $this->string()->null(),
+            'fid_type' => $this->integer()->notNull()
         ]);
     }
 

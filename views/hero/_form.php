@@ -10,11 +10,13 @@ use yii\widgets\ActiveForm;
 
 <div class="hero-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'picture')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'file')->fileInput() ?>
+
+    <?= $form->field($model, 'fid_type')->dropDownList(\yii\helpers\ArrayHelper::map(\app\models\Type::find()->all(), 'id_type', 'name')) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
